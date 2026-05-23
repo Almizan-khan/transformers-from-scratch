@@ -44,6 +44,7 @@ temp_file = tempfile.NamedTemporaryFile(
 temp_file.write(text_data)
 temp_file.close()
 
+
 tokenizer.train(
     [temp_file.name],
     trainer
@@ -131,8 +132,11 @@ class MultiHeadAttention(nn.Module):
 
 
         self.values = nn.Linear(embed_dim, embed_dim, bias=False)
+        
         self.keys = nn.Linear(embed_dim, embed_dim, bias=False)
+        
         self.queries = nn.Linear(embed_dim, embed_dim, bias=False)
+        
         self.fc_out = nn.Linear(embed_dim, embed_dim)
 
 
@@ -169,6 +173,7 @@ class TransformerBlock(nn.Module):
     def __init__(self, embed_dim, num_heads, forward_expansion, dropout):
         super().__init__()
         self.attention = MultiHeadAttention(embed_dim, num_heads)
+        
         self.norm1 = nn.LayerNorm(embed_dim)
         self.norm2 = nn.LayerNorm(embed_dim)
         self.feed_forward = nn.Sequential(
@@ -186,6 +191,10 @@ class TransformerBlock(nn.Module):
         forward = self.feed_forward(x)
         out = self.norm2(self.dropout(forward) + x)
         return out
+
+
+
+
 
 """# **TRANSFORMERS DECODER **"""
 
@@ -209,6 +218,8 @@ num_heads = 2
 
 
 encoder_block = TransformerBlock(embedding_dim, num_heads, forward_expansion, dropout)
+
+
 decoder_block = DecoderBlock(embedding_dim, num_heads, forward_expansion, dropout)
 
 
